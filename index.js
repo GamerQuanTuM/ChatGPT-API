@@ -34,7 +34,7 @@ app.use(
 app.use("/chatgpt", modelRouter);
 
 app.get("/", (req, res) => {
-  res.status(200).json({ ChatGPT });
+  res.status(200).json("ChatGPT");
 });
 
 server.listen(PORT, () => {
