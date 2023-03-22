@@ -33,6 +33,10 @@ app.use(
 );
 app.use("/chatgpt", modelRouter);
 
+app.get("/", (req, res) => {
+  res.status(200).json({ ChatGPT });
+});
+
 server.listen(PORT, () => {
   dbConnect();
   console.log(`Server is running at http://localhost:${PORT}`);
