@@ -4,9 +4,13 @@ import Chatgpt from "./schema.js";
 
 const router = express.Router();
 
-router.get("/history", async (_, res) => {
+router.get("/history", async (req, res) => {
   try {
-    const chats = await Chatgpt.find({}).sort({ createdAt: -1 });
+    const excludeId = req.query.exclude;
+    let chats = await Chatgpt.find({}).sort({ createdAt: -1 });
+    if (excludeId) {
+      chats = chats.filter((chat) => chat._id.toString() !== excludeId);
+    }
     res.status(200).json(chats);
   } catch (error) {
     console.error(error);
