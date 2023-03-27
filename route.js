@@ -1,6 +1,7 @@
 import express from "express";
 import { openai } from "./index.js";
 import Chatgpt from "./schema.js";
+import Dalle from "./dalle.js";
 
 const router = express.Router();
 
@@ -41,6 +42,28 @@ router.post("/turbo-3.5", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json(error);
+  }
+});
+
+router.post("/dalle", async (req, res) => {
+  const image = req.body.image;
+  try {
+    const response = await openai.createImage({
+      prompt: image,
+      n: 1,
+      size: "1024x1024",
+    });
+
+    const { url } = response.data.data[0];
+    const chatResponse = new Dalle({
+      image: image,
+      response: url,
+    });
+    const savedChatResponse = await chatResponse.save();
+    const chat = savedChatResponse;
+    res.status(200).json(chat);
+  } catch (error) {
+    res.status(500).json({ message: "Error" });
   }
 });
 
