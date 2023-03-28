@@ -19,6 +19,16 @@ router.get("/history", async (req, res) => {
   }
 });
 
+router.get("/image", async (req, res) => {
+  try {
+    let chats = await Dalle.find({}).sort({ createdAt: -1 });
+    res.status(200).json(chats);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json(error);
+  }
+});
+
 router.post("/turbo-3.5", async (req, res) => {
   const { content } = req.body;
   try {
